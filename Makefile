@@ -5,7 +5,7 @@ EXEC = db_project
 # Les fichiers sources
 SRC = src/main.c src/btree.c src/repl.c
 # Flags de compilation (ajout du -o ici)
-CFLAGS = -Wall  -g -o $(EXEC)
+CFLAGS = -Wall  -g 
 
 
 # Target par défaut : compile le programme
@@ -13,7 +13,7 @@ all: $(EXEC)
 
 # Règle pour construire l'exécutable
 $(EXEC): $(SRC)
-	$(CC) $(CFLAGS) $(SRC)
+	$(CC) $(CFLAGS) -o $(EXEC) $(SRC)
 
 
 # Section pour exécuter le programme après la compilation
