@@ -4,7 +4,7 @@ CC = gcc
 EXEC = db_project
 # Les fichiers sources
 SRC = src/main.c src/btree.c src/repl.c
-# Flags de compilation (ajout du -o ici)
+# Flags de compilation
 CFLAGS = -Wall  -g 
 
 
