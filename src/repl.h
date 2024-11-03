@@ -5,37 +5,57 @@
 #include <stddef.h> //pour size_t
 
 
-// Énumérations pour les commandes
+
+//Déclaration de la structure Row pour représenter une ligne
+typedef struct {
+    int id;
+    char name[255];
+    char email[255];
+}Row;
+
+//Déclaration de la structure Statement pour représenter une instruction
+typedef struct{
+    StatementType type;
+    Row row; //Inclure la ligne dans l'instruction
+}Statement;
+
+//Énumérations pour les commandes
 typedef enum {
     META_COMMAND_SUCCESS,
     META_COMMAND_UNRECOGNIZED_COMMAND
 } MetaCommandResult; //commandes en mode repl 
 
 
+//Déclaration de l'énumération pour les résultats de commande préparée
 typedef enum { 
     PREPARE_SUCCESS, 
     PREPARE_UNRECOGNIZED_STATEMENT 
-} PrepareResult;    // pour vérifier le succès ou l'échec de la préparation de la requête.
+} PrepareResult;    //pour vérifier le succès ou l'échec de la préparation de la commande.
 
 
+//Déclaration des types de statements
 typedef enum { 
     STATEMENT_INSERT, 
     STATEMENT_SELECT 
-} StatementType;   // pour définir le type de requêtes SQL
+} StatementType;   //pour définir le type de commande
 
-// Structure pour une instruction
+
+
+//Structure pour une instruction
 typedef struct {
     StatementType type;
 } Statement;
 
-// Structure pour le tampon d'entrée
+
+//Déclaration de la structure InputBuffer pour gérer l'entrée utilisateur
 typedef struct {
     char* buffer;
     size_t buffer_length;
     size_t input_length;
-} InputBuffer;  // représente le buffer qui contient l'entrée utilisateur.
+} InputBuffer;  //représente le buffer qui contient l'entrée utilisateur.
 
-// Fonctions déclarées
+
+//Prototypes de fonctions
 InputBuffer* new_input_buffer();
 void print_prompt();
 void read_input(InputBuffer* input_buffer);
