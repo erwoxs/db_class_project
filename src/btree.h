@@ -2,13 +2,7 @@
 #ifndef BTREE_H
 #define BTREE_H
 #include <stdbool.h>
-
-// Définir une structure row (ligne) qui contient les données à insérer
-typedef struct {
-    int id;                // id
-    char name[255];        // name
-    char email[255];       // email
-} Row;
+#include "repl.h"
 
 // Définir une structure de noeud pour chaque noeud de l'arbre binaire
 typedef struct Node {

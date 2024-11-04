@@ -6,18 +6,14 @@
 
 
 
-//Déclaration de la structure Row pour représenter une ligne
+// Définir une structure row (ligne) qui contient les données à insérer
 typedef struct {
-    int id;
-    char name[255];
-    char email[255];
-}Row;
+    int id;                // id
+    char name[255];        // name
+    char email[255];       // email
+} Row;
 
-//Déclaration de la structure Statement pour représenter une instruction
-typedef struct{
-    StatementType type;
-    Row row; //Inclure la ligne dans l'instruction
-}Statement;
+
 
 //Énumérations pour les commandes
 typedef enum {
@@ -39,12 +35,11 @@ typedef enum {
     STATEMENT_SELECT 
 } StatementType;   //pour définir le type de commande
 
-
-
-//Structure pour une instruction
-typedef struct {
+//Déclaration de la structure Statement pour représenter une instruction
+typedef struct{
     StatementType type;
-} Statement;
+    Row row; //Inclure la ligne dans l'instruction
+}Statement;
 
 
 //Déclaration de la structure InputBuffer pour gérer l'entrée utilisateur
