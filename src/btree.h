@@ -19,8 +19,7 @@ typedef struct Table {
 Table* new_table();                  // Crée une nouvelle instance de la table
 void table_insert(Table* table, Row data); // Insère une ligne dans l'arbre binaire
 Row* table_select(Table* table, int id);   // Recherche une ligne par id dans l'arbre binaire
-void table_update(Table* table, int id, const char* name, const char* email); //Modifie la ligne en utilisant l'id pour modifier le nom ou l'email
-void table_delete(Table* table, int id); //Supprime une ligne en recherchant l'id
+Row* table_update(Table* table, int id, const char* name, const char* email); //Modifie la ligne en utilisant l'id pour modifier le nom ou l'email
 void free_table(Table* table);             // Libère la mémoire allouée pour chaque noeud
 
 #endif
