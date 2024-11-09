@@ -34,7 +34,6 @@ typedef enum {
     STATEMENT_INSERT, 
     STATEMENT_SELECT,
     STATEMENT_UPDATE,
-    STATEMENT_DELETE
 } StatementType;   
 
 //Déclaration de la structure Statement pour représenter une instruction

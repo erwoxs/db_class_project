@@ -19,6 +19,16 @@ InputBuffer* new_input_buffer() {
     return input_buffer;
 }
 
+//Fonction pour convertir une commande saisie en majuscule en minuscule
+void to_lowercase(char* str) {
+    for (int i = 0; str[i]; i++) //Parcours chaque caractère de la chaine str
+    { 
+        if (str[i] >= 'A' && str[i] <= 'Z') { //Vérifie si une letrtre est une majuscule compris entre A et Z
+            str[i] = str[i] + ('a' - 'A'); //Si une lettre est une majuscule, elle sera converti en minuscule
+        }
+    }
+}
+
 // Fonction pour afficher l'invite
 void print_prompt() { 
     printf("db > "); 
@@ -53,40 +63,76 @@ MetaCommandResult do_meta_command(InputBuffer* input_buffer) {
 
 // Fonction pour préparer une instruction
 PrepareResult prepare_statement(InputBuffer* input_buffer, Statement* statement) {
-    if (strncmp(input_buffer->buffer, "insert", 6) == 0) {
-        statement->type = STATEMENT_INSERT;
-        //Déclarer les champs pour id, name, email
+    to_lowercase(input_buffer->buffer);//Convertir la commande en minuscules
+    if (strncmp(input_buffer->buffer, "insert", 6) == 0) //Vérifie si la commande est un update en comparant la chaine
+    { 
+
+        statement->type = STATEMENT_INSERT; //Indique que le type de commande est insert 
         int id;
         char name[255];
         char email[255];
 
-        //Exemple de format d'entrée : "insert 1 Bob bob@exemple.com"
-        int args_assigned = sscanf(input_buffer->buffer, "insert %d %s %s", &id, name, email);
+        
+        int args_assigned = sscanf(input_buffer->buffer, "insert %d %s %s", &id, name, email); //Extrait les données entré par l'utilisateur pour les stocker
         
         if (args_assigned < 3) {
             printf("Syntaxe de la commande INSERT invalide. Utilisation : insert <id> <name> <email>\n");
             return PREPARE_UNRECOGNIZED_STATEMENT;
         }
 
-        // Assigner les valeurs à l'instruction
+        // Stocke les valeurs extraites dans statement->row
         statement->row.id = id;
         strncpy(statement->row.name, name, sizeof(statement->row.name) - 1);
-        statement->row.name[sizeof(statement->row.name) - 1] = '\0'; // Assurer que c'est bien terminé
+        statement->row.name[sizeof(statement->row.name) - 1] = '\0'; // Assure que c'est bien terminé
         strncpy(statement->row.email, email, sizeof(statement->row.email) - 1);
-        statement->row.email[sizeof(statement->row.email) - 1] = '\0'; // Assurer que c'est bien terminé
+        statement->row.email[sizeof(statement->row.email) - 1] = '\0'; // Assure,que c'est bien terminé
 
         return PREPARE_SUCCESS;
     }
-    if (strcmp(input_buffer->buffer, "select") == 0) {
-        statement->type = STATEMENT_SELECT;
+    if (strncmp(input_buffer->buffer, "select",6) == 0) //Vérifie si la commande est insert en comparant la chaine
+    {
+        statement->type = STATEMENT_SELECT; //Indique que le type de commande est insert
+        //Vérifie si l'id est fourni après un select
+        int id; //stocke l'identifiant qui sera extrait de la commande SELECT
+            if (sscanf(input_buffer->buffer, "select %d", &id) == 1) {
+            statement->row.id = id;  // Si un ID est spécifié
+        } else {
+            statement->row.id = -1;  // Sinon, définis à -1 pour indiquer "toutes les lignes"
+        }
         return PREPARE_SUCCESS;
+
+    }else if (strncmp(input_buffer->buffer,"update",6)==0) { //Vérifie si la commande est insert en comparant la chaine
+
+        int id;
+        char name[255];
+        char email[255];
+
+        //Extrait les arguments de la commande update
+        int args_assigned = sscanf(input_buffer->buffer, "update %d %s %s", &id, name, email); //Extrait les données entré par l'utilisateur pour les stocker
+    
+        if (args_assigned<3)
+        {
+            printf("Syntaxe de la commande UPDATE invalide. Utilisation : update <id> <name> <email>\n");
+            return PREPARE_UNRECOGNIZED_STATEMENT;
+        }
+
+        // Stocker les valeurs extraites dans statement->row pour pouvoir les afficher ou modifier
+        statement->type = STATEMENT_UPDATE;
+        statement->row.id = id;
+        strncpy(statement->row.name, name, sizeof(statement->row.name) - 1);
+        statement->row.name[sizeof(statement->row.name) - 1] = '\0';
+        strncpy(statement->row.email, email, sizeof(statement->row.email) - 1);
+        statement->row.email[sizeof(statement->row.email) - 1] = '\0';
+
+        return PREPARE_SUCCESS;
+
     }
     return PREPARE_UNRECOGNIZED_STATEMENT;
 }
 
 // Fonction pour exécuter une instruction
 void execute_statement(Statement* statement) {
-    switch (statement->type) {
+    switch (statement->type) { //Vérifie le type d'insutrction contenue dans statement-type
         case (STATEMENT_INSERT):
             // Créer une nouvelle ligne à partir des données d'insertion
             Row row = statement->row;
@@ -95,14 +141,38 @@ void execute_statement(Statement* statement) {
             printf("Row inséré avec succès : id=%d, name=%s, email=%s\n", row.id, row.name, row.email);
             break;
         case (STATEMENT_SELECT):
-            // Afficher toutes les lignes
-            for (int id = 0; id <= 100; id++) { // Vous pouvez ajuster la plage comme bon vous semble
-                Row* row = table_select(table, id);
+            //Si un id est fourni, la ligne sera affiché avec cet id
+            if(statement->row.id>=0)
+            {
+                Row* row = table_select(table,statement->row.id);
                 if (row) {
-                    printf("Row trouvé : id=%d, name=%s, email=%s\n", row->id, row->name, row->email);
+                    printf("Row trouvé : id=%d, name=%s,email=%s\n", row->id,row->name,row->email);
+                }else
+                {
+                    printf("Aucune ligne trouvée avec l'ID %d.\n", statement->row.id);
                 }
+            }else
+            {
+                // Afficher toutes les lignes
+                for (int id = 0; id <= 100; id++)  //Parcours tous les ID possible pour afficher toutes les lignes présentes dans la table
+                {
+                    Row* row = table_select(table, id);
+                    if (row)
+                    {
+                        printf("Row trouvé : id=%d, name=%s, email=%s\n", row->id, row->name, row->email);
+                    }
+                }
+            }            
+            break;
+        case (STATEMENT_UPDATE):
+            //Appel de la fonction table_update pour effectuer la mise à jour
+            if (table_update(table,statement->row.id,statement->row.name,statement->row.email)) {
+                printf("Row mise à jour avec succès : id=%d, name=%s, email=%s\n", statement->row.id, statement->row.name, statement->row.email);
+            } else {
+                printf("Aucune ligne trouvée avec l'ID %d pour mise à jour.\n", statement->row.id);
             }
             break;
+            
     }
 }
 

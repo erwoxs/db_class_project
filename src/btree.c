@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "btree.h"
+#include <string.h>
 
 //Crée une nouvelle table avec un arbre vide
 Table* new_table() {
