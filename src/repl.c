@@ -6,7 +6,6 @@
 #include "repl.h"
 #include "btree.h"   //Fichier header pour l'arbre binaire
 
-
 //Déclare une variable globale pour la table
 Table *table; //Stocke les données
 
@@ -142,7 +141,7 @@ void execute_statement(Statement* statement) {
             break;
         case (STATEMENT_SELECT):
             //Si un id est fourni, la ligne sera affiché avec cet id
-            if(statement->row.id>=0)
+            if(statement->row.id >=0)
             {
                 Row* row = table_select(table,statement->row.id);
                 if (row) {
