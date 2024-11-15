@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include "repl.h"
 #include "btree.h"   //Fichier header pour l'arbre binaire
+#include "dpersistence.h"
 
 //Déclare une variable globale pour la table
 Table *table; //Stocke les données
@@ -138,6 +139,7 @@ void execute_statement(Statement* statement) {
             // Insérer la ligne dans l'arbre
             table_insert(table, row);
             printf("Row inséré avec succès : id=%d, name=%s, email=%s\n", row.id, row.name, row.email);
+            save_table_to_file(table, "table_data.dat"); //Sauvegarde après insertion
             break;
         case (STATEMENT_SELECT):
             //Si un id est fourni, la ligne sera affiché avec cet id
@@ -167,6 +169,7 @@ void execute_statement(Statement* statement) {
             //Appel de la fonction table_update pour effectuer la mise à jour
             if (table_update(table,statement->row.id,statement->row.name,statement->row.email)) {
                 printf("Row mise à jour avec succès : id=%d, name=%s, email=%s\n", statement->row.id, statement->row.name, statement->row.email);
+                save_table_to_file(table, "table_data.dat"); // Sauvegarder après mise à jour
             } else {
                 printf("Aucune ligne trouvée avec l'ID %d pour mise à jour.\n", statement->row.id);
             }
@@ -178,7 +181,11 @@ void execute_statement(Statement* statement) {
 // Fonction principale REPL
 void repl(void) {
     InputBuffer* input_buffer = new_input_buffer();
-    table = new_table(); //Initialise la table pour contenir les données
+    
+    table = load_table_from_file("table_data.dat");  // Charger la table depuis le fichier
+    if (!table) {
+        table = new_table();  // Si le fichier n'existe pas, créer une nouvelle table
+    }
     while (true) {
         print_prompt();
         read_input(input_buffer);

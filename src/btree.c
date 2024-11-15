@@ -6,6 +6,8 @@
 //Crée une nouvelle table avec un arbre vide
 Table* new_table() {
     Table* table = (Table*)malloc(sizeof(Table));
+    table->rows = NULL;   // Initialisation de rows
+    table->num_rows = 0; // Initialisation de num_rows
     table->root = NULL; // L'arbre commence sans aucun nœud
     return table;
 }
@@ -20,6 +22,7 @@ Node* create_node(Row data) {
 }
 
 // Insère un nouveau Row dans l'arbre
+
 void table_insert(Table* table, Row data) {
     if (table->root == NULL) {
         // Si l'arbre est vide, le Row devient la racine

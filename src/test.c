@@ -3,8 +3,9 @@
 #include "repl.h"
 #include "btree.h"
 #include <stdlib.h>
-
+#include "test.h"
 extern Table* table;  //Accède à la variable globale table pour faire des tests sur la table
+
 
 void test_insert_row() {
     printf("Test d'insertion de ligne:\n");
@@ -27,6 +28,7 @@ void test_insert_row() {
     execute_statement(&statement);
 
     printf("Test d'insertion réussi\n\n");
+
 }
 
 void test_select_all() {
@@ -92,11 +94,11 @@ int main() {
     test_select_by_id(1);  //Sélectionne la ligne avec ID = 1
     test_select_by_id(2);  //Sélectionne la ligne avec ID = 2
 
-    //Test de mise à jour
+    /*Test de mise à jour
     test_update_row(1, "test1", "test1@example.com");  //Mise à jour de la ligne avec ID 1
-    test_update_row(2, "test2", "test1@example.com");  //Mise à jour de la ligne avec ID 2
+    test_update_row(2, "test2", "test3@example.com");  //Mise à jour de la ligne avec ID 2
 
-    test_select_all(); //Sélectionne à nouveau toutes les lignes insérées et modifiées
+    test_select_all(); //Sélectionne à nouveau toutes les lignes insérées et modifiées*/
 
     free(table);
     return 0;

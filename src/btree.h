@@ -12,8 +12,10 @@ typedef struct Node {
 
 // Définir une structure de table de la base de données
 typedef struct Table {
-    Node* root;  
-              //pointeur vers la racine de l'arbre binaire
+    int num_rows;
+    Row* rows;
+    Node* root;  //pointeur vers la racine de l'arbre binaire
+    
 } Table;
 
 // Prototypes de fonctions pour manipuler l'arbre binaire

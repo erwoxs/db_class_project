@@ -5,11 +5,10 @@ EXEC = db_project
 #Nom de l'exécutable de test 
 TEST_EXEC=db_test
 # Les fichiers sources
-SRC = src/main.c src/btree.c src/repl.c 
+SRC = src/main.c src/btree.c src/repl.c src/dpersistence.c
 
 #Fichier test 
-TEST_SRC = src/test.c src/btree.c src/repl.c 
-# Flags de compilation
+TEST_SRC = src/test.c  src/btree.c src/repl.c src/dpersistence.c
 CFLAGS = -Wall  -g #-Wall active touts les avertissements -g : génère des informations de débogue plus simple
 
 
@@ -42,4 +41,4 @@ clean:
 	rm -f *.o
 
 # Indique que ces cibles ne correspondent pas à des fichiers
-.PHONY: all run clean  test
+.PHONY: all run clean test
