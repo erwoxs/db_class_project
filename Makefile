@@ -28,6 +28,16 @@ run: $(EXEC)
 	@echo "Execution : "
 	./$(EXEC)
 
+# Règle pour exécuter Valgrind avec le programme principal
+valgrind: $(EXEC)
+	@echo "Execution du programme principal avec Valgrind :"
+#Commande qui exécute le programme principal avec Valgrind, pour détecter des erreurs de gestion mémoire
+#--leak-check=full -> Vérifie toutes les fuites de mémoire et de les afficher
+#--track-origins=yes -> Option pour retrouver l'origine des erreurs liées à l'utilisation de mémoire non initialisée.
+	valgrind --leak-check=full --track-origins=yes ./$(EXEC)   
+	
+
+
 # Section pour exécuter les tests
 test: $(TEST_EXEC)
 	@echo "Execution des tests :"
