@@ -10,7 +10,6 @@
 typedef struct {
     int id;                // id
     char name[255];        // name
-    char email[255];       // email
 } Row;
 
 

@@ -71,7 +71,7 @@ Row* table_select(Table* table, int id) {
     return NULL; // Si l'ID n'est pas trouvé dans l'arbre
 }
 
-Row* table_update(Table* table, int id, const char* name, const char* email)
+Row* table_update(Table* table, int id, const char* name)
 {
       Node* current = table->root;
     
@@ -80,9 +80,6 @@ Row* table_update(Table* table, int id, const char* name, const char* email)
             //Mettre a jour le nom et l'email
             strncpy(current->data.name,name,sizeof(current->data.name)-1); //Update du nom
             current->data.name[sizeof(current->data.name)-1]='\0'; //Assure que le nom est bien terminé
-
-            strncpy(current->data.email,email,sizeof(current->data.email)-1); //Update du email
-            current->data.email[sizeof(current->data.email)-1]='\0'; //Assure que l'email est bien terminé
 
             return &current->data;  //Si l'id est trouvé on retourne un pointeur vers les données
         
