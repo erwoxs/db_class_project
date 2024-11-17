@@ -47,7 +47,7 @@ test: $(TEST_EXEC)
 
 # Nettoyage des fichiers compilés
 clean:
-	rm -f $(EXEC) $(TEST_EXEC)
+	rm -f $(EXEC) $(TEST_EXEC) table_data.dat
 	rm -f *.o
 
 # Indique que ces cibles ne correspondent pas à des fichiers
