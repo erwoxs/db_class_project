@@ -37,7 +37,7 @@ It is possible to modify the type of data used in the database. By default, the 
    ```bash
    git clone <your_github_repository_url>
    cd <project_folder_name>
-### Récapitulatif des commandes :
+### Commands :
 
 - **`make`** : Compiles the project to generate the executable.
   
