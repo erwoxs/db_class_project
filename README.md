@@ -6,14 +6,20 @@ This project is a simple database in C with a command-line interface (REPL). It 
 
 - **INSERT**: Adds an entry to the database.  
   - Syntax: `insert <id> <name>`
-   ![Insert Example](media/image1.gif) 
+    
+   ![Insert Example](media/image1.gif)
+  
 - **SELECT**: Displays all entries or a specific entry by ID.  
   - Syntax without argument: `select`  
   - Syntax with a specific ID: `select <id>`
-  ![Insert Example](media/image2.gif) 
+    
+  ![Insert Example](media/image2.gif)
+  
 - **UPDATE**: Updates a specific entry based on the ID.  
   - Syntax: `update <id> <name>`
-  ![Insert Example](media/image3.gif) 
+    
+  ![Insert Example](media/image3.gif)
+  
 - **.exit**: Exits the REPL program.  
   - Syntax: `.exit`
 
