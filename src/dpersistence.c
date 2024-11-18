@@ -7,7 +7,7 @@
 void save_node(Node* node, FILE* file) {
     if (node == NULL) {
         int null_marker = -1;
-        fwrite(&null_marker, sizeof(int), 1, file);  //crit un marqueur pour NULL
+        fwrite(&null_marker, sizeof(int), 1, file);  //Ecrit un marqueur pour NULL
         return;
     }
 
