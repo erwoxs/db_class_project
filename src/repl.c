@@ -4,7 +4,7 @@
 #include <stdlib.h> 
 #include <unistd.h>
 #include "repl.h"
-#include "btree.h"   //Fichier header pour l'arbre binaire
+#include "btree.h"  
 #include "dpersistence.h"
 
 //Déclare une variable globale pour la table
