@@ -1,15 +1,14 @@
 #ifndef REPL_H
 #define REPL_H
-
-#include <stdbool.h> //pour bool
-#include <stddef.h> //pour size_t
-
+#include <stdbool.h> 
+#include <stddef.h> 
 
 
-// Définir une structure row qui contient les données à insérer ou afficher
+
+//Définir une structure row qui contient les données à insérer ou afficher
 typedef struct {
-    int id;                // id
-    char name[255];        // name
+    int id;                //id
+    char name[255];        //name
 } Row;
 
 
@@ -58,6 +57,6 @@ void close_input_buffer(InputBuffer* input_buffer); //Libère la mémoire allou�
 MetaCommandResult do_meta_command(InputBuffer* input_buffer); //Lit input_buffer pour identifier si l'utilisateur a entré une commande méta.
 PrepareResult prepare_statement(InputBuffer* input_buffer, Statement* statement); //Analyse l'entrée utilisateur pour voir si elle correspond à une instruction 
 void execute_statement(Statement* statement); //Execute l'instruction en fonction de son type.
-void repl(void); //démarre la boucle repl
+void repl(void); //Démarre la boucle repl
 
 #endif // REPL_H
