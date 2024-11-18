@@ -10,7 +10,7 @@
 //Déclare une variable globale pour la table
 Table *table; //Stocke les données
 
-// Fonction pour créer un nouveau buffer d'entrée
+//Fonction pour créer un nouveau buffer d'entrée
 InputBuffer* new_input_buffer() {
     InputBuffer* input_buffer = (InputBuffer*)malloc(sizeof(InputBuffer));
     input_buffer->buffer = NULL;
@@ -29,30 +29,30 @@ void to_lowercase(char* str) {
     }
 }
 
-// Fonction pour afficher l'invite
+//Fonction pour afficher l'invite
 void print_prompt() { 
     printf("db > "); 
 }
 
-// Fonction pour lire l'entrée utilisateur
+//Fonction pour lire l'entrée utilisateur
 void read_input(InputBuffer* input_buffer) {
     ssize_t bytes_read = getline(&(input_buffer->buffer), &(input_buffer->buffer_length), stdin);
     if (bytes_read <= 0) {
         printf("Error reading input\n");
         exit(EXIT_FAILURE);
     }
-    // Ignorer le saut de ligne
+    //Ignorer le saut de ligne
     input_buffer->input_length = bytes_read - 1;
-    input_buffer->buffer[bytes_read - 1] = 0; // Remplacer '\n' par '\0'
+    input_buffer->buffer[bytes_read - 1] = 0; //Remplacer '\n' par '\0'
 }
 
-// Fonction pour fermer le buffer d'entrée
+//Fonction pour fermer le buffer d'entrée
 void close_input_buffer(InputBuffer* input_buffer) {
     free(input_buffer->buffer);
     free(input_buffer);
 }
 
-// Fonction pour traiter les commandes de métadonnées
+//Fonction pour traiter les commandes de métadonnées
 MetaCommandResult do_meta_command(InputBuffer* input_buffer) {
     if (strcmp(input_buffer->buffer, ".exit") == 0) {
         close_input_buffer(input_buffer);
@@ -61,7 +61,7 @@ MetaCommandResult do_meta_command(InputBuffer* input_buffer) {
     return META_COMMAND_UNRECOGNIZED_COMMAND;
 }
 
-// Fonction pour préparer une instruction
+//Fonction pour préparer une instruction
 PrepareResult prepare_statement(InputBuffer* input_buffer, Statement* statement) {
     to_lowercase(input_buffer->buffer);//Convertir la commande en minuscules
     if (strncmp(input_buffer->buffer, "insert", 6) == 0) //Vérifie si la commande est un update en comparant la chaine
@@ -79,10 +79,10 @@ PrepareResult prepare_statement(InputBuffer* input_buffer, Statement* statement)
             return PREPARE_UNRECOGNIZED_STATEMENT;
         }
 
-        // Stocke les valeurs extraites dans statement->row
+        //Stocke les valeurs extraites dans statement->row
         statement->row.id = id;
         strncpy(statement->row.name, name, sizeof(statement->row.name) - 1);
-        statement->row.name[sizeof(statement->row.name) - 1] = '\0'; // Assure que c'est bien terminé
+        statement->row.name[sizeof(statement->row.name) - 1] = '\0'; //Assure que c'est bien terminé
 
         return PREPARE_SUCCESS;
     }
@@ -92,9 +92,9 @@ PrepareResult prepare_statement(InputBuffer* input_buffer, Statement* statement)
         //Vérifie si l'id est fourni après un select
         int id; //stocke l'identifiant qui sera extrait de la commande SELECT
             if (sscanf(input_buffer->buffer, "select %d", &id) == 1) {
-            statement->row.id = id;  // Si un ID est spécifié
+            statement->row.id = id;  //Si un ID est spécifié
         } else {
-            statement->row.id = -1;  // Sinon, définis à -1 pour indiquer "toutes les lignes"
+            statement->row.id = -1;  //Sinon, définis à -1 pour indiquer "toutes les lignes"
         }
         return PREPARE_SUCCESS;
 
@@ -112,7 +112,7 @@ PrepareResult prepare_statement(InputBuffer* input_buffer, Statement* statement)
             return PREPARE_UNRECOGNIZED_STATEMENT;
         }
 
-        // Stocker les valeurs extraites dans statement->row pour pouvoir les afficher ou modifier
+        //Stocker les valeurs extraites dans statement->row pour pouvoir les afficher ou modifier
         statement->type = STATEMENT_UPDATE;
         statement->row.id = id;
         strncpy(statement->row.name, name, sizeof(statement->row.name) - 1);
@@ -124,13 +124,13 @@ PrepareResult prepare_statement(InputBuffer* input_buffer, Statement* statement)
     return PREPARE_UNRECOGNIZED_STATEMENT;
 }
 
-// Fonction pour exécuter une instruction
+//Fonction pour exécuter une instruction
 void execute_statement(Statement* statement) {
     switch (statement->type) { //Vérifie le type d'insutrction contenue dans statement-type
         case (STATEMENT_INSERT):
-            // Créer une nouvelle ligne à partir des données d'insertion
+            //Créer une nouvelle ligne à partir des données d'insertion
             Row row = statement->row;
-            // Insérer la ligne dans l'arbre
+            //Insérer la ligne dans l'arbre
             table_insert(table, row);
             printf("Row inséré avec succès : id=%d, name=%s\n", row.id, row.name);
             save_table_to_file(table, "table_data.dat"); //Sauvegarde après insertion
@@ -148,7 +148,7 @@ void execute_statement(Statement* statement) {
                 }
             }else
             {
-                // Afficher toutes les lignes
+                //Afficher toutes les lignes
                 for (int id = 0; id <= 100; id++)  //Parcours tous les ID possible pour afficher toutes les lignes présentes dans la table
                 {
                     Row* row = table_select(table, id);
@@ -163,7 +163,7 @@ void execute_statement(Statement* statement) {
             //Appel de la fonction table_update pour effectuer la mise à jour
             if (table_update(table,statement->row.id,statement->row.name)) {
                 printf("Row mise à jour avec succès : id=%d, name=%s\n", statement->row.id, statement->row.name);
-                save_table_to_file(table, "table_data.dat"); // Sauvegarder après mise à jour
+                save_table_to_file(table, "table_data.dat"); //Sauvegarder après mise à jour
             } else {
                 printf("Aucune ligne trouvée avec l'ID %d pour mise à jour.\n", statement->row.id);
             }
@@ -172,13 +172,13 @@ void execute_statement(Statement* statement) {
     }
 }
 
-// Fonction principale REPL
+//Fonction principale REPL
 void repl(void) {
     InputBuffer* input_buffer = new_input_buffer();
     
-    table = load_table_from_file("table_data.dat");  // Charger la table depuis le fichier
+    table = load_table_from_file("table_data.dat");  //Charger la table depuis le fichier
     if (!table) {
-        table = new_table();  // Si le fichier n'existe pas, créer une nouvelle table
+        table = new_table();  //Si le fichier n'existe pas, créer une nouvelle table
     }
     while (true) {
         print_prompt();
